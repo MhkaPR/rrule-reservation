@@ -11,4 +11,5 @@ dependencies = [
     "django-redis>=7.0.0",
     "djangorestframework>=3.18.3",
     "djangorestframework-stubs>=3.18.1",
+    "python-dateutil>=2.9.0.post0",
 ]
