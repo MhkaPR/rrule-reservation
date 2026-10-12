@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-iranian_phone_validator = RegexValidator(regex=r"^09\d{9}$",
+iranian_phone_validator = RegexValidator(regex=r"^\+989\d{9}$",
                                          message="Enter a valid Iranian mobile number (e.g., 09123456789).",
                                          code='invalid_iranian_mobile', )
 
@@ -26,10 +26,10 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'phone'
-    phone = models.CharField(max_length=11,validators=[iranian_phone_validator], unique=True)
-    password = models.CharField(_("password"), max_length=128,  null=True, blank=True)
+    phone = models.CharField(max_length=15,validators=[iranian_phone_validator], unique=True)
+    password = models.CharField(_("password"), max_length=128)
 
     objects = UserManager()
 
     def __str__(self):
-        return self.phone
+        return str(self.phone)

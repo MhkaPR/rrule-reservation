@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    "rest_framework.authtoken",
+    "phone_verify",
+    "django_redis",
+    "django_ratelimit",
 
     # My Apps
     'accounts',
@@ -135,6 +139,53 @@ MAILERS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ),
+}
+
+PHONE_VERIFICATION = {
+    "BACKEND": "sms.backends.dummy.DummyBackend",
+    "OPTIONS": {},
+    "TOKEN_LENGTH": 6,
+    "SECURITY_CODE_EXPIRATION_SECONDS": 120,
+    "MESSAGE": "{app}: Your verification code is {security_code}. It expires in 2 minutes.",
+    "APP_NAME": "RRule Reservation Service",
+    "VERIFY_SECURITY_CODE_ONLY_ONCE": False,
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "format": "[{asctime}] {levelname} {name}: {message}",
+    "style": "{",
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+    "formatters": {
+        "default": {"format": "[{asctime}] {levelname} {name}: {message}", "style": "{"},
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
 }
